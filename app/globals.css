@@ -4,6 +4,8 @@
   --tron-cyan:   #7dd3fc;
   --neon-white:  #e0f2fe;
   --burnt-amber: #ff4500;
+  /* Mobile nav height — bottom tab bar */
+  --mobile-nav-h: 64px;
 }
 
 /* ─── KEYFRAMES ──────────────────────────────────────────────────────────── */
@@ -44,11 +46,6 @@
   100% { box-shadow: 0 0 18px rgba(125, 211, 252, 0.25), inset 0 0 8px rgba(125, 211, 252, 0.05); opacity: 0.6; }
 }
 
-@keyframes skill-bubble-shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
 @keyframes slide-in-left {
   from { opacity: 0; transform: translateX(-40px); }
   to   { opacity: 1; transform: translateX(0); }
@@ -63,11 +60,6 @@
   0%   { box-shadow: 0 0  8px rgba(125, 211, 252, 0.15); }
   50%  { box-shadow: 0 0 28px rgba(125, 211, 252, 0.40), inset 0 0 10px rgba(125, 211, 252, 0.04); }
   100% { box-shadow: 0 0  8px rgba(125, 211, 252, 0.15); }
-}
-
-@keyframes education-bubble-pop {
-  0%   { opacity: 0; transform: scale(0.85); }
-  100% { opacity: 1; transform: scale(1); }
 }
 
 /* ── name letter slide from left ── */
@@ -99,7 +91,6 @@
   100% { transform: translateX(0)    translateY(0)    rotate(0deg); }
 }
 
-/* ── skill bubble shake (triggered via class on parent hover) ── */
 @keyframes bubble-shake {
   0%   { transform: translateX(0)    translateY(0); }
   20%  { transform: translateX(-2px) translateY(-1px); }
@@ -109,7 +100,6 @@
   100% { transform: translateX(0)    translateY(0); }
 }
 
-/* ── experience card border pulse ── */
 @keyframes exp-border-glow {
   0%   { box-shadow: 0 0 10px rgba(255,69,0,0.3), inset 0 0 8px rgba(255,69,0,0.05); }
   50%  { box-shadow: 0 0 45px rgba(255,69,0,0.7), inset 0 0 20px rgba(255,69,0,0.1); }
@@ -124,14 +114,46 @@
   filter: drop-shadow(0 0 12px rgba(125, 211, 252, 0.7)) !important;
 }
 
-/* Letter-by-letter slide from LEFT for Home title */
 .home-letter {
   display: inline-block;
   opacity: 0;
   animation: letter-slide-from-left 0.22s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-/* Nav sidebar grid background */
+/* ── MOBILE BOTTOM NAV ── */
+/* Hidden on desktop, visible on mobile */
+.mobile-nav {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--mobile-nav-h);
+  z-index: 50;
+  background: rgba(1, 4, 9, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(125, 211, 252, 0.15);
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 4px;
+}
+
+@media (min-width: 768px) {
+  .mobile-nav { display: none; }
+}
+
+/* ── DESKTOP SIDEBAR NAV ── */
+/* Hidden on mobile, visible on desktop */
+.desktop-nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-nav { display: flex; }
+}
+
+/* Nav grid background — desktop sidebar only */
 .nav-grid-bg {
   position: fixed;
   left: 0;
@@ -144,9 +166,14 @@
     linear-gradient(rgba(125, 211, 252, 0.22) 1px, transparent 1px),
     linear-gradient(90deg, rgba(125, 211, 252, 0.22) 1px, transparent 1px);
   background-size: 18px 18px;
-  /* Fade the grid lines out toward the right edge into the main panel */
   -webkit-mask-image: linear-gradient(to right, black 55%, transparent 100%);
   mask-image: linear-gradient(to right, black 55%, transparent 100%);
+  /* Hidden on mobile */
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .nav-grid-bg { display: block; }
 }
 
 /* ── ELECTRIC SECTION HEADERS ── */
@@ -157,7 +184,6 @@
     electric-flicker 8s ease-in-out infinite;
 }
 
-/* Stagger each letter slightly */
 .electric-letter:nth-child(1)  { animation-delay: 0s,    0s; }
 .electric-letter:nth-child(2)  { animation-delay: 0.08s, 0.08s; }
 .electric-letter:nth-child(3)  { animation-delay: 0.16s, 0.16s; }
@@ -174,7 +200,6 @@
   animation: disk-ring-glow 3s ease-in-out infinite;
 }
 
-/* Disk outer ring hover effect */
 .disk-outer-ring {
   transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -240,7 +265,7 @@
   animation: exp-border-glow 1.8s ease-in-out infinite;
 }
 
-/* ─── NAV ────────────────────────────────────────────────────────────────── */
+/* ─── DESKTOP SIDEBAR NAV ITEMS ──────────────────────────────────────────── */
 
 .nav-item-container {
   display: flex;
@@ -266,6 +291,65 @@
 
 .group:hover .nav-trail,
 .nav-active .nav-trail { opacity: 1; }
+
+/* ─── MOBILE NAV ITEMS ───────────────────────────────────────────────────── */
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  flex: 1;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  background: none;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 0; /* allow flex shrink */
+}
+
+.mobile-nav-item.active {
+  background: rgba(125, 211, 252, 0.08);
+}
+
+.mobile-nav-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(125, 211, 252, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.mobile-nav-item.active .mobile-nav-dot {
+  border-color: var(--tron-cyan);
+  background: rgba(125, 211, 252, 0.12);
+  box-shadow: 0 0 12px rgba(125, 211, 252, 0.4);
+}
+
+.mobile-nav-label {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(125, 211, 252, 0.35);
+  transition: color 0.25s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.mobile-nav-item.active .mobile-nav-label {
+  color: var(--tron-cyan);
+}
 
 /* ─── ANCHORS ────────────────────────────────────────────────────────────── */
 
@@ -319,7 +403,30 @@
   z-index: 20;
 }
 
-/* ─── CYAN SCAN LINE (projects, resume) ──────────────────────────────────── */
+/* ─── MAIN PANEL RESPONSIVE OFFSET ─────────────────────────────────────────
+   Mobile: full width, padded at bottom for the tab bar.
+   Desktop: offset left to clear the sidebar nav.
+──────────────────────────────────────────────────────────────────────────── */
+
+.main-panel {
+  margin-left: 0;
+  padding-bottom: var(--mobile-nav-h);
+}
+
+@media (min-width: 768px) {
+  .main-panel {
+    margin-left: 112px;
+    padding-bottom: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-panel {
+    margin-left: 140px;
+  }
+}
+
+/* ─── CYAN SCAN LINE ──────────────────────────────────────────────────────── */
 
 .tron-scan-line {
   position: absolute;
@@ -333,7 +440,7 @@
   pointer-events: none;
 }
 
-/* ─── AMBER SCAN LINE (experience card) ──────────────────────────────────── */
+/* ─── AMBER SCAN LINE ──────────────────────────────────────────────────────── */
 
 .exp-scan-line {
   position: absolute;
@@ -347,7 +454,7 @@
   pointer-events: none;
 }
 
-/* ── SKILLS DISK RING — smooth pulsing glow on hover ── */
+/* ── SKILLS DISK RING ── */
 
 @keyframes skills-ring-pulse {
   0%   { filter: drop-shadow(0 0 6px rgba(224,242,254,0.5)) drop-shadow(0 0 14px rgba(224,242,254,0.2)); stroke-width: 3; }
@@ -364,7 +471,39 @@
   animation: skills-ring-pulse 2s ease-in-out infinite;
 }
 
+/* ── MOBILE SKILLS LIST (replaces disk on small screens) ── */
 
+.skills-mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding: 16px 0;
+}
+
+.skills-mobile-category {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skills-mobile-category-title {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px #ff4500;
+  filter: drop-shadow(0 0 8px rgba(255,69,0,1));
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 69, 0, 0.2);
+}
+
+.skills-mobile-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 
 @keyframes project-card-glow {
   0%   { box-shadow: 0 0 10px rgba(125,211,252,0.35), 0 0 24px rgba(125,211,252,0.15), inset 0 0 6px rgba(125,211,252,0.03); border-color: rgba(125,211,252,0.65) !important; }
@@ -384,7 +523,6 @@
   z-index: 0;
 }
 
-/* Skill pill wrapper */
 .skill-pill-project {
   display: inline-block;
 }
@@ -403,40 +541,48 @@
   animation: slide-in-right 0.6s cubic-bezier(0.19,1,0.22,1) both;
 }
 
-.project-card:hover {
-  border-color: rgba(125,211,252,1) !important;
-  box-shadow: 0 0 28px rgba(125,211,252,0.75), 0 0 60px rgba(125,211,252,0.4), 0 0 100px rgba(125,211,252,0.15), inset 0 0 18px rgba(125,211,252,0.07);
-}
-
+/* On mobile, all cards animate the same direction */
 @media (max-width: 640px) {
   .project-card-even, .project-card-odd {
     animation: slide-in-left 0.6s cubic-bezier(0.19,1,0.22,1) both;
   }
+  /* Remove complex clip-paths on small screens — they can clip content */
+  .project-card {
+    clip-path: none !important;
+    border-radius: 4px;
+  }
+}
+
+.project-card:hover {
+  border-color: rgba(125,211,252,1) !important;
+  box-shadow: 0 0 28px rgba(125,211,252,0.75), 0 0 60px rgba(125,211,252,0.4), 0 0 100px rgba(125,211,252,0.15), inset 0 0 18px rgba(125,211,252,0.07);
 }
 
 /* ─── PROJECTS SPINE ─────────────────────────────────────────────────────── */
 
 .projects-spine {
   position: absolute;
-  left: clamp(8px, 3vw, 24px);
+  /* Mobile: left edge spine */
+  left: 16px;
   top: 0; bottom: 0;
-  width: clamp(3px, 0.4vw, 5px);
+  width: 3px;
   background: var(--tron-cyan);
   box-shadow: 0 0 4px var(--tron-cyan), 0 0 20px rgba(125,211,252,0.4);
   z-index: 2;
 }
 
 @media (min-width: 768px) {
-  .projects-spine { left: 50%; transform: translateX(-50%); }
+  .projects-spine { left: 50%; width: clamp(3px, 0.4vw, 5px); transform: translateX(-50%); }
 }
 
 .projects-spine-node {
   position: absolute;
-  left: clamp(8px, 3vw, 24px);
+  /* Mobile: aligned to left spine */
+  left: 16px;
   top: 50%;
   transform: translate(-50%, -50%);
-  width:  clamp(10px, 1.5vw, 16px);
-  height: clamp(10px, 1.5vw, 16px);
+  width:  14px;
+  height: 14px;
   border-radius: 50%;
   border: 2px solid var(--tron-cyan);
   background: #010409;
@@ -446,7 +592,7 @@
 }
 
 @media (min-width: 768px) {
-  .projects-spine-node { left: 50%; transform: translate(-50%, -50%); }
+  .projects-spine-node { left: 50%; width: clamp(10px, 1.5vw, 16px); height: clamp(10px, 1.5vw, 16px); transform: translate(-50%, -50%); }
 }
 
 .projects-branch-line { display: none; }
@@ -480,12 +626,19 @@
   clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
 }
 
+/* Simpler clip on mobile to prevent content clipping */
+@media (max-width: 640px) {
+  .resume-block {
+    clip-path: none;
+    border-radius: 4px;
+  }
+}
+
 .resume-block:hover {
   border-color: rgba(125, 211, 252, 0.5);
   box-shadow: 0 0 40px rgba(125, 211, 252, 0.1);
 }
 
-/* Title inside resume blocks — cyan */
 .resume-block-title {
   font-size: clamp(0.8rem, 2vw, 1.1rem);
   font-weight: 900;
@@ -496,7 +649,6 @@
   filter: drop-shadow(0 0 8px rgba(125,211,252,0.7));
 }
 
-/* Title inside resume experience block — amber */
 .resume-block-title-amber {
   font-size: clamp(0.8rem, 2vw, 1.1rem);
   font-weight: 900;
@@ -514,7 +666,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(10px,1.5vw,16px) clamp(24px,4vw,48px);
+  /* Mobile: full width, comfortable tap target */
+  width: 100%;
+  max-width: 360px;
+  padding: clamp(12px,3vw,16px) clamp(24px,4vw,48px);
   border: 2px solid var(--tron-cyan);
   background: rgba(125, 211, 252, 0.05);
   color: var(--tron-cyan);
@@ -523,6 +678,8 @@
   transition: background 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 0 20px rgba(125,211,252,0.2);
   overflow: hidden;
+  /* Minimum tap target */
+  min-height: 48px;
 }
 
 .resume-download-btn::before {
@@ -536,4 +693,12 @@
 .resume-download-btn:hover {
   background: rgba(125, 211, 252, 0.15);
   box-shadow: 0 0 40px rgba(125,211,252,0.45), 0 0 80px rgba(125,211,252,0.15);
+}
+
+/* ─── EXPERIENCE CARD CLIP (mobile override) ──────────────────────────────── */
+@media (max-width: 640px) {
+  .exp-card {
+    clip-path: none !important;
+    border-radius: 4px;
+  }
 }
